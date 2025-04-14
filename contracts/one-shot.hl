@@ -1,0 +1,40 @@
+minting one_shot
+
+ enum Redeemer { 
+    Mint {
+        tokenName: ByteArray
+        qty: Int
+    }
+    Burn
+}
+
+const TX_ID: ByteArray = #
+const TX_IDX: Int = 0
+
+// Contract parameters
+const txId: TxId = TxId::new(TX_ID)
+const outputId: TxOutputId = TxOutputId::new(txId, TX_IDX)
+
+func main(redeemer: Redeemer, ctx: ScriptContext) -> Bool {
+    tx: Tx = ctx.tx;
+    value_minted: Value = tx.minted;
+    mph: MintingPolicyHash = ctx.get_current_minting_policy_hash();
+    
+    redeemer.switch {
+        red:Mint => {
+            assetclass: AssetClass = AssetClass::new(
+                mph, 
+                red.tokenName
+            );
+            (value_minted == Value::new(assetclass, red.qty)).trace("OS1: ") &&
+            tx.inputs.any((input: TxInput) -> Bool {
+                                (input.output_id == outputId).trace("OSP2: ")
+                                }
+                        )
+            
+        },
+        Burn => {
+            true
+        }
+    }
+}

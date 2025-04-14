@@ -1,0 +1,61 @@
+spending faucet
+
+struct Datum {
+    withdrawalAmount: Int
+    faucetTokenName: ByteArray
+}
+
+enum Redeemer {
+    Withdraw {
+        senderPkh: PubKeyHash
+        accessTokenName: ByteArray
+    }
+}
+
+const ACCESS_TOKEN_SYMBOL: ByteArray = #
+const FAUCET_TOKEN_SYMBOL: ByteArray = #
+
+func main(datumIn: Datum,redeemer: Redeemer, ctx: ScriptContext) -> Bool {
+    tx: Tx = ctx.tx;
+    vHash : ValidatorHash = ctx.get_current_validator_hash();    
+    txOutputsContract : []TxOutput = tx.outputs_locked_by(vHash);
+    faucetAssetVal: Value = ctx.get_current_input().value;
+
+    redeemer.switch {
+        red:Withdraw => {
+            faucetTokenSymbol: MintingPolicyHash = MintingPolicyHash::new(FAUCET_TOKEN_SYMBOL);
+            faucetTokenAssetClass: AssetClass = AssetClass::new(
+                faucetTokenSymbol, 
+                datumIn.faucetTokenName
+            );
+
+            accessTokenSymbol: MintingPolicyHash = MintingPolicyHash::new(ACCESS_TOKEN_SYMBOL);
+            accessTokenAssetClass: AssetClass = AssetClass::new(
+                accessTokenSymbol, 
+                red.accessTokenName
+            );
+            txOutputsPkh : []TxOutput = tx.outputs_sent_to(red.senderPkh);
+            if (txOutputsContract.length == 1 && 
+                txOutputsPkh.length >= 1 ) {
+                    faucetAssetValOut: Int = txOutputsContract.head.value.get(faucetTokenAssetClass);
+                    faucetAssetValIn: Int = faucetAssetVal.get(faucetTokenAssetClass);
+                    faucetAssetPkhOut: Int = txOutputsPkh.head.value.get(faucetTokenAssetClass);
+                    accessTokenPkhOut: Int = txOutputsPkh.head.value.get(accessTokenAssetClass);
+                    (faucetAssetValIn - faucetAssetValOut == datumIn.withdrawalAmount).trace("SPV1: ") &&
+                    (faucetAssetPkhOut == datumIn.withdrawalAmount).trace("SPV2: ") &&
+                    (accessTokenPkhOut == 1).trace("SPV3: ") &&
+                    txOutputsContract.head.datum.switch {
+                        datumDataOut: Inline => { 
+                            datumOut: Datum = Datum::from_data(datumDataOut.data);
+                            datumOut == datumIn
+                        },
+                        else => false.trace("SPV4: ") // No inline datum found
+                    }
+            } 
+            else {
+                false.trace("SPV5: ") // wrong number of outputs or inputs
+            }
+        },
+        else => false.trace("SPV6: ") // wrong redeemer
+    }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "ppbl-2024-helios-examples",
+  "version": "1.0.0",
+  "description": "Faucet example using Helios on-chain and off-chaind DSL",
+  "main": "index.js",
+  "type": "module",
+  "license": "AGPL-version-3.0",
+  "private": false,
+  "engines": {
+    "node": ">= 14.0.0",
+    "npm": ">= 6.0.0"
+  },
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": "",
+  "keywords": [],
+  "contributors": [],
+  "scripts": {
+    "clean": "rm -rf dist && rm -rf node_modules && rm package-lock.json",
+    "lint:fix": "prettier \"**/*.{js,ts}\" -w",
+    "lint": "prettier \"**/*.{js,ts}\" --check",
+    "test": "vitest --config ./test/vitest.config.test.ts run",
+    "test:network": "vitest --config ./test/vitest.config.test.ts run -t",
+    "test:ui": "vitest --ui --config ./test/vitest.config.test.ts"
+  },
+  "dependencies": {
+    "@hyperionbt/helios": "^0.16.7",
+    "prettier": "^3.5.3",
+    "vitest": "^3.1.1"
+  },
+  "devDependencies": {
+    "@hyperionbt/helios-loader": "^0.1.5",
+    "@types/node": "^22.14.0",
+    "@vitest/ui": "^3.1.1"
+  }
+}
