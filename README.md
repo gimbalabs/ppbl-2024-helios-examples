@@ -49,6 +49,7 @@ $ npm run test:network -t "Withdraw Faucet Token 1"
 Once the transaction is confirmed, you will see the 100 faucet tokens transferred from the fauacet validator script into the wallet.
 
 
+For more information on Helios, please refer to the user documentation https://www.hyperion-bt.org/helios-book/ 
 
 
 
