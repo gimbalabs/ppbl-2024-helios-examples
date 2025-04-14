@@ -5,6 +5,7 @@
 $ git clone https://github.com/gimbalabs/ppbl-2024-helios-examples.git
 $ cd ppbl-2024-helios-examples
 $ npm install
+$ cp .env.example .env
 ```
 
 ### Runing the emulator test suite
@@ -15,7 +16,6 @@ $ npm test
 ### Running each test cases against a real network (eg. preprod)
 You will need to fund your network wallet which uses a seed phrase (wallet entropy) defined in a .env file and also provide a Blockfrost API key.
 ```
-$ cp .env.example .env
 WALLET_ENTROPY=
 BLOCKFROST_API_KEY=
 ```
