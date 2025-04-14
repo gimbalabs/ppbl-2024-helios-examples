@@ -8,9 +8,7 @@ import {
 } from "@hyperionbt/helios";
 
 import preprod from "../config/preprod.json";
-
-// Emulator flag
-export const emulator = true;
+import { configEnv } from "../src/config";
 
 // Define the Cardano Network
 export const network = "preprod";
@@ -21,10 +19,10 @@ export const optimize = false;
 
 // Create Client
 export let client: NetworkEmulator | BlockfrostV0;
-if (emulator) {
+if (configEnv.USE_EMULATOR === 'true') {
   client = new NetworkEmulator();
 } else {
-  client = new BlockfrostV0("preprod", process.env.BLOCKFROST_API_KEY || "");
+  client = new BlockfrostV0("preprod", configEnv.BLOCKFROST_API_KEY || "");
 }
 
 // Read in the network parameter file
@@ -32,15 +30,14 @@ export const networkParams = new NetworkParams(preprod);
 
 // Create a wallet
 export let wallet: SimpleWallet;
-if (emulator) {
+if (configEnv.USE_EMULATOR === 'true') {
   // Create a Wallet - we add 10ADA to start
   wallet = (client as NetworkEmulator).createWallet(10_000_000n);
   (client as NetworkEmulator).tick(10n);
 } else {
-  const entropy = process.env.WALLET_ENTROPY || "";
+  const entropy = configEnv.WALLET_ENTROPY || "";
   const rootKey = RootPrivateKey.fromPhrase(entropy.split(" "));
   const privateKey = rootKey.deriveSpendingKey();
   wallet = new SimpleWallet(client, privateKey);
-  console.log("Wallet created");
   console.log("Wallet address: ", wallet.address.toBech32());
 }

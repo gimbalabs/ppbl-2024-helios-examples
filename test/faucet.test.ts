@@ -10,16 +10,17 @@ import {
 } from "vitest";
 
 import { lock, mint, withdraw } from "./offchain";
-import { client, emulator, wallet } from "./client";
+import { client, wallet } from "./client";
 import { ReturnType } from "./types";
 import { generateReport } from "./utils";
+import { configEnv } from "../src/config";
 
 describe("Faucet", () => {
   let exCosts = [] as ReturnType[];
-  let accessTokenNameHex: string = process.env.ACCESS_TOKEN_NAME_HEX || "";
-  let accessTokenPolicy: string = process.env.ACCESS_TOKEN_POLICY || "";
-  let faucetTokenNameHex: string = process.env.FAUCET_TOKEN_NAME_HEX || "";
-  let faucetTokenPolicy: string = process.env.FAUCET_TOKEN_POLICY || "";
+  let accessTokenNameHex: string = configEnv.ACCESS_TOKEN_NAME_HEX || "";
+  let accessTokenPolicy: string = configEnv.ACCESS_TOKEN_POLICY || "";
+  let faucetTokenNameHex: string = configEnv.FAUCET_TOKEN_NAME_HEX || "";
+  let faucetTokenPolicy: string = configEnv.FAUCET_TOKEN_POLICY || "";
 
   const withdrawalAmount = 100n;
   const faucetLockedAmount = 1000000n;
@@ -37,7 +38,7 @@ describe("Faucet", () => {
   });
 
   afterEach(async () => {
-    if (emulator && "tick" in client) {
+    if (configEnv.USE_EMULATOR === 'true') {
       (client as NetworkEmulator).tick(10n);
     }
   });

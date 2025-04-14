@@ -28,11 +28,14 @@
   },
   "dependencies": {
     "@hyperionbt/helios": "^0.16.7",
+    "bip39": "^3.1.0",
+    "dotenv": "^16.5.0",
     "prettier": "^3.5.3",
     "vitest": "^3.1.1"
   },
   "devDependencies": {
     "@hyperionbt/helios-loader": "^0.1.5",
+    "@types/dotenv": "^6.1.1",
     "@types/node": "^22.14.0",
     "@vitest/ui": "^3.1.1"
   }
