@@ -1,6 +1,6 @@
 # Plutus Project Based Learning 
 ## Testing PPBL Faucet in Helios
-#### Setup
+### Setup
 ```
 $ git clone https://github.com/gimbalabs/ppbl-2024-helios-examples.git
 $ cd ppbl-2024-helios-examples
