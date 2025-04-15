@@ -1,11 +1,14 @@
 minting one_shot
 
  enum Redeemer { 
-    Mint {
-        tokenName: ByteArray
-        qty: Int
-    }
-    Burn
+        Mint {
+            tokenName: ByteArray
+            qty: Int
+        }
+        Burn {
+            tokenName: ByteArray
+            qty: Int
+        }
 }
 
 const TX_ID: ByteArray = #
@@ -27,14 +30,20 @@ func main(redeemer: Redeemer, ctx: ScriptContext) -> Bool {
                 red.tokenName
             );
             (value_minted == Value::new(assetclass, red.qty)).trace("OS1: ") &&
+            (red.qty > 0).trace("OS2: ") &&
             tx.inputs.any((input: TxInput) -> Bool {
-                                (input.output_id == outputId).trace("OSP2: ")
+                                (input.output_id == outputId).trace("OS3: ")
                                 }
                         )
             
         },
-        Burn => {
-            true
+        red: Burn => {
+            assetclass: AssetClass = AssetClass::new(
+                mph, 
+                red.tokenName
+            );
+            (value_minted == Value::new(assetclass, red.qty)).trace("OS4: ") &&
+            (red.qty < 0).trace("OS5: ")
         }
     }
 }
