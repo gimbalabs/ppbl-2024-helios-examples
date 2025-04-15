@@ -11,6 +11,29 @@ $ cp .env.example .env
 ### Runing the emulator test suite
 ```
 $ npm test
+...
+stdout | test/faucet.test.ts > Faucet
+Transaction Name     | CPU             | MEM         | FEE       
+-----------------------------------------------------------------
+Mint                 | 69,100,794      | 226,679     | 241,819 
+Mint                 | 73,415,461      | 235,821     | 252,910 
+Lock                 |                 |             | 174,785 
+Withdraw             | 123,794,616     | 382,924     | 290,726 
+Withdraw             | 125,740,406     | 401,139     | 295,657 
+E2E Faucet Test - END
+
+ ✓ test/faucet.test.ts (6 tests) 627ms
+   ✓ Faucet > Mint Access Token 190ms
+   ✓ Faucet > Mint Faucet Token 82ms
+   ✓ Faucet > Lock Faucet Token 65ms
+   ✓ Faucet > Withdraw Faucet Token 1 119ms
+   ✓ Faucet > Withdraw Faucet Token 2 113ms
+   ✓ Faucet > Check Wallet Balance 6ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  07:27:49
+   Duration  1.13s (transform 107ms, setup 0ms, collect 168ms, tests 627ms, environment 0ms, prepare 119ms)
 ```
 
 ### Running each test cases against a real network (eg. preprod)
