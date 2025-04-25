@@ -37,9 +37,10 @@ E2E Faucet Test - END
 ```
 
 ### Running each test cases against a real network (eg. preprod)
-You will need to fund your network wallet which uses a seed phrase (wallet entropy) defined in a .env file and also provide a Blockfrost API key.
+You will need to fund your network wallet which uses a seed phrase (wallet entropy) defined in a .env file and also provide a Blockfrost API key. Set the ```USE_EMULATOR``` to ```false```.
 ```
 WALLET_ENTROPY=
+USE_EMULATOR=false
 BLOCKFROST_API_KEY=
 ```
 
